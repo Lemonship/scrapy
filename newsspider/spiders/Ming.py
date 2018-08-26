@@ -10,7 +10,8 @@ import re
 class MingSpider(SitemapSpider):
     name = 'Ming'
     allowed_domains = ['news.mingpao.com']
-    sitemap_urls = ['https://news.mingpao.com/robots.txt'  ]
+    sitemap_urls = ['https://news.mingpao.com/robots.txt']
+    #sitemap_follow = ['/要聞','/港聞','/經濟','/中國','/國際','/地產','/兩岸']
 
     def parse(self, response):
         # # 命令行调试代码
