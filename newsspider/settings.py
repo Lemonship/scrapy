@@ -14,7 +14,7 @@ BOT_NAME = 'newsspider'
 SPIDER_MODULES = ['newsspider.spiders']
 NEWSPIDER_MODULE = 'newsspider.spiders'
 
-FEED_EXPORT_ENCODING = 'utf-8'
+# FEED_EXPORT_ENCODING = 'utf-8'
 # FEED_FORMAT = 'json' # 输出格式
 # FEED_EXPORTERS_BASE = { 
 #     'json': 'scrapy.exporters.JsonItemExporter',

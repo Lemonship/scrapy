@@ -19,9 +19,10 @@ class JsonDatePipeline(object):
     def _exporter_for_item(self, item):
         date = item['date']
         if date not in self.export_item_date:
-            f = open('ScrapyData/' + '{}.json'.format(date), 'w', encoding='utf-8')
+            f = open('ScrapyData/' + '{}.json'.format(date), 'wb')
             exporter = JsonLinesItemExporter(f)
-            # exporter.encoding = 'utf-8'
+            exporter.encoding = 'utf-8'
+            exporter.encoder.ensure_ascii = False
             exporter.start_exporting()
             self.export_item_date[date] = exporter
         return self.export_item_date[date]
@@ -29,7 +30,12 @@ class JsonDatePipeline(object):
     def process_item(self, item, spider):
         exporter = self._exporter_for_item(item)
         exporter.export_item(item)
-        return item        
+        return item
+
+    def close_spider(self, spider):
+        for exporter in self.export_item_date.values():
+            exporter.finish_exporting()
+            exporter.file.close() 
 
 # class JsonWithEncodingPipeline(object):
 #     def open_spider(self, spider):        
