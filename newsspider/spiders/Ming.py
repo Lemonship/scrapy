@@ -11,25 +11,21 @@ class MingSpider(SitemapSpider):
     name = 'Ming'
     allowed_domains = ['news.mingpao.com']
     sitemap_urls = ['https://news.mingpao.com/robots.txt']
-    #sitemap_follow = ['/要聞','/港聞','/經濟','/中國','/國際','/地產','/兩岸']
+    sitemap_follow = ['/要聞/','/港聞/','/經濟/','/中國/','/國際/','/地產/','/兩岸/']
+    custom_settings = {
+        'FEED_EXPORT_FIELDS' : ["date", "category", "link", "title", "desc"],
+    }    
 
-    def parse(self, response):
-        # # 命令行调试代码
-        # from scrapy.shell import inspect_response
-        # inspect_response(response, self)        
-        #filename = 'MingData.json'
+    def parse(self, response):     
         item = NewsspiderItem()
 
-        #with open(filename, 'wb') as f:
         title = response.xpath('//title/text()').extract()[0]
         title = re.split(' - ',title)
         item['date'] = title[1]
         item['category'] = title[2]
         item['title'] = title[0]
-        item['desc'] = response.xpath('//p/text()').extract()
+        item['desc'] = response.xpath('//p/text()').extract()[0]
         item['link'] =  response.url
         yield item 
 
-        # print(item)
-            #f.write(item)
 

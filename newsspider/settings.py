@@ -15,7 +15,11 @@ SPIDER_MODULES = ['newsspider.spiders']
 NEWSPIDER_MODULE = 'newsspider.spiders'
 
 FEED_EXPORT_ENCODING = 'utf-8'
-
+# FEED_FORMAT = 'json' # 输出格式
+# FEED_EXPORTERS_BASE = { 
+#     'json': 'scrapy.exporters.JsonItemExporter',
+#     'jsonlines': 'scrapy.exporters.JsonLinesItemExporter',
+# }
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'newsspider (+http://www.yourdomain.com)'
@@ -66,9 +70,10 @@ ROBOTSTXT_OBEY = True
 
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'newsspider.pipelines.NewsspiderPipeline': 300,
-#}
+ITEM_PIPELINES = {
+    'newsspider.pipelines.JsonDatePipeline': 250,
+    # 'newsspider.pipelines.JsonWithEncodingPipeline': 300,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html
