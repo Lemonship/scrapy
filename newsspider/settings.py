@@ -15,6 +15,7 @@ SPIDER_MODULES = ['newsspider.spiders']
 NEWSPIDER_MODULE = 'newsspider.spiders'
 DOWNLOAD_DELAY = 2
 
+# FEED_EXPORT_ENCODING = 'utf-8'
 # FEED_FORMAT = 'json' # 输出格式
 # FEED_EXPORTERS_BASE = { 
 #     'json': 'scrapy.exporters.JsonItemExporter',
