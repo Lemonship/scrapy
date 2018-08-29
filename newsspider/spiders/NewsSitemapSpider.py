@@ -4,9 +4,10 @@ import logging
 
 from scrapy.spiders import Spider, SitemapSpider
 from scrapy.http import Request, XmlResponse
-from scrapy.utils.sitemap import Sitemap, sitemap_urls_from_robots
+from scrapy.utils.sitemap import sitemap_urls_from_robots
 from scrapy.utils.gz import gunzip, gzip_magic_number
-
+from newsspider.items import NewsSitemapItem
+from newsspider.util.deepsitemap import Sitemap
 
 logger = logging.getLogger(__name__)
 
@@ -30,10 +31,11 @@ class NewsSitemapSpider(SitemapSpider):
                         yield Request(loc, callback=self._parse_sitemap)
             elif s.type == 'urlset':
                 if 'http://www.google.com/schemas/sitemap-news/' in s._root.nsmap['news']:
-                    for loc in iterloc(s, self.sitemap_alternate_links):
+                    for news in iternews(s, self.sitemap_alternate_links):
                         for r, c in self._cbs:
-                            if r.search(loc):
-                                yield Request(loc, callback=c)
+                            if r.search(news.loc):
+                                yield news
+                                yield Request(news.loc, callback=c)
                                 break
                 else:
                     for loc in iterloc(s, self.sitemap_alternate_links):
@@ -46,7 +48,18 @@ class NewsSitemapSpider(SitemapSpider):
 #     if isinstance(x, six.string_types):
 #         return re.compile(x)
 #     return x
+def iternews(it, alt=False):
+    for d in it:
+        news = NewsSitemapItem()
+        news['loc'] = d['loc']
+        # news['publication'] = d['news']['publication']
+        # news['publication_date'] = d.['news']['publication_date']
+        yield news
 
+        # # Also consider alternate URLs (xhtml:link rel="alternate")
+        # if alt and 'alternate' in d:
+        #     for l in d['alternate']:
+        #         yield l
 
 def iterloc(it, alt=False):
     for d in it:
