@@ -14,9 +14,9 @@ class TestSpider(NewsSitemapSpider):
     #start_urls = ['https://www.theguardian.com/australia-news/2018/aug/28/julie-bishop-to-remain-an-mp-but-keeps-future-options-open']
     sitemap_urls = ['https://www.theguardian.com/sitemaps/news.xml']
     #sitemap_follow = ['/要聞/','/港聞/','/經濟/','/中國/','/國際/','/地產/','/兩岸/']
-    # custom_settings = {
-    #     'FEED_EXPORT_FIELDS' : ["date", "category", "link", "title", "desc"],
-    # }    
+    custom_settings = {
+        'FEED_EXPORT_FIELDS' : ["date", "category", "link", "keywords", "title", "desc"],
+    }    
 
     def parse(self, response):     
         item = NewsspiderItem()
@@ -32,4 +32,5 @@ class TestSpider(NewsSitemapSpider):
         item['title'] = title[0]
         item['desc'] = ''.join(response.xpath('//p/text()').extract())
         item['link'] =  response.url
+        item['keywords'] = response.meta['keywords']
         yield item 

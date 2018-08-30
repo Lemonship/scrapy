@@ -33,9 +33,8 @@ class NewsSitemapSpider(SitemapSpider):
                 if 'http://www.google.com/schemas/sitemap-news/' in s._root.nsmap['news']:
                     for news in iternews(s, self.sitemap_alternate_links):
                         for r, c in self._cbs:
-                            if r.search(news.loc):
-                                yield news
-                                yield Request(news.loc, callback=c)
+                            if r.search(news['loc']):
+                                yield Request(news['loc'], callback=c, meta=news)
                                 break
                 else:
                     for loc in iterloc(s, self.sitemap_alternate_links):
@@ -52,8 +51,11 @@ def iternews(it, alt=False):
     for d in it:
         news = NewsSitemapItem()
         news['loc'] = d['loc']
-        # news['publication'] = d['news']['publication']
-        # news['publication_date'] = d.['news']['publication_date']
+        news['publication_name'] = d['news']['publication']['name']
+        news['language'] = d['news']['publication']['language']
+        news['publication_date'] = d['news']['publication_date']
+        news['title'] = d['news']['title']
+        news['keywords'] = d['news']['keywords']
         yield news
 
         # # Also consider alternate URLs (xhtml:link rel="alternate")

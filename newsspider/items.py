@@ -14,10 +14,11 @@ class NewsspiderItem(scrapy.Item):
     title = scrapy.Field()
     desc = scrapy.Field()
     link = scrapy.Field()
+    keywords = scrapy.Field()    
     
 class NewsSitemapItem(scrapy.Item):
     loc = scrapy.Field()
-    publication = scrapy.Field()
+    publication_name = scrapy.Field()
     language = scrapy.Field()
     publication_date = scrapy.Field()
     title = scrapy.Field()

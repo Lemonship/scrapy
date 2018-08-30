@@ -25,6 +25,7 @@ class MingpaoSpider(SitemapSpider):
         item['title'] = title[0]
         item['desc'] = response.xpath('//p/text()').extract()[0]
         item['link'] =  response.url
+        item['keywords'] = response.meta['keywords']        
         yield item 
 
 

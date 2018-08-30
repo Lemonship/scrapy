@@ -21,13 +21,14 @@ class TheguardianSpider(Spider):
 
         title = response.xpath('//title/text()').extract()[0]
         title = title.split(' | ')
-        url = response.url.split('/')
-        date = url[4] + url[5] + url[6]
+        date = re.search(r'(\d{4})/([a-z]{3})/(\d{2})',response.url)
+        date = ''.join(date.groups())
         date = datetime.datetime.strptime(date,'%Y%b%d')
         date = date.strftime('%Y%m%d')
         item['date'] = date
         item['category'] = title[1]
         item['title'] = title[0]
-        item['desc'] = response.xpath('//p/text()').extract()[0]
+        item['desc'] = ''.join(response.xpath('//p/text()').extract())
         item['link'] =  response.url
+        item['keywords'] = response.meta['keywords']
         yield item 

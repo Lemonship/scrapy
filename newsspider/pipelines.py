@@ -24,9 +24,10 @@ class JsonDatePipeline(object):
         if not os.path.exists(os.path.dirname(filePath)):
             os.makedirs(os.path.dirname(filePath))
         if date not in self.export_item_date:
-            f = open('ScrapyData/' + '{}.json'.format(date), 'wb')
+            f = open(filePath, 'wb')
             exporter = JsonLinesItemExporter(f)
             exporter.encoding = 'utf-8'
+            exporter.fields_to_export = spider.settings['FEED_EXPORT_FIELDS']
             exporter.encoder.ensure_ascii = False
             exporter.start_exporting()
             self.export_item_date[date] = exporter
