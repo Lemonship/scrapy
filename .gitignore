@@ -1,0 +1,4 @@
+.vscode/
+ScrapyData/
+newsspider/__pycache__/
+__pycache__/

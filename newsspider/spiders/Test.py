@@ -2,7 +2,6 @@
 import scrapy
 from scrapy import Request
 from scrapy.spiders import Spider
-#from scrapy.spiders import SitemapSpider
 from newsspider.spiders.NewsSitemapSpider import NewsSitemapSpider
 from newsspider.items import NewsspiderItem
 import re

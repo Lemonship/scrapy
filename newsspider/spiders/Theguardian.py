@@ -2,19 +2,19 @@
 import scrapy
 from scrapy import Request
 from scrapy.spiders import Spider
-from scrapy.spiders import SitemapSpider
+from newsspider.spiders.NewsSitemapSpider import NewsSitemapSpider
 from newsspider.items import NewsspiderItem
 import re
 import datetime
 
-class TheguardianSpider(Spider):
+class TheguardianSpider(NewsSitemapSpider):
     name = 'Theguardian'
     allowed_domains = ['www.theguardian.com']
     sitemap_urls = ['https://www.theguardian.com/sitemaps/news.xml']
     #sitemap_follow = ['/要聞/','/港聞/','/經濟/','/中國/','/國際/','/地產/','/兩岸/']
-    # custom_settings = {
-    #     'FEED_EXPORT_FIELDS' : ["date", "category", "link", "title", "desc"],
-    # }    
+    custom_settings = {
+        'FEED_EXPORT_FIELDS' : ["date", "category", "link", "keywords", "title", "desc"],
+    }
 
     def parse(self, response):     
         item = NewsspiderItem()
