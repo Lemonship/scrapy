@@ -26,6 +26,8 @@ class TheguardianSpider(NewsSitemapSpider):
         date = datetime.datetime.strptime(date,'%Y%b%d')
         date = date.strftime('%Y%m%d')
         item['date'] = date
+        item['maincategory'] = title[1]
+        item['subcategory'] = title[1]        
         item['category'] = title[1]
         item['title'] = title[0]
         item['desc'] = ''.join(response.xpath('//p/text()').extract())

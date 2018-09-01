@@ -9,12 +9,13 @@ import scrapy
 
 
 class NewsspiderItem(scrapy.Item):
-    date = scrapy.Field()
-    category = scrapy.Field()
+    publication_date = scrapy.Field()
+    maincategory = scrapy.Field()
+    subcategory = scrapy.Field()
     title = scrapy.Field()
     desc = scrapy.Field()
     link = scrapy.Field()
-    keywords = scrapy.Field()    
+    keywords = scrapy.Field()
     
 class NewsSitemapItem(scrapy.Item):
     loc = scrapy.Field()

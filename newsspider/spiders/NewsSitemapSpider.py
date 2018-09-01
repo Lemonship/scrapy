@@ -1,11 +1,8 @@
-# import re
 import logging
-# import six
 
 from scrapy.spiders import Spider, SitemapSpider
 from scrapy.http import Request, XmlResponse
 from scrapy.utils.sitemap import sitemap_urls_from_robots
-from scrapy.utils.gz import gunzip, gzip_magic_number
 from newsspider.items import NewsSitemapItem
 from newsspider.util.deepsitemap import Sitemap
 

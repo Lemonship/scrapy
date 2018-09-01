@@ -1,10 +1,20 @@
-from scrapy import cmdline
-
-""" 
+from scrapy.utils.project import get_project_settings
 from scrapy.crawler import CrawlerProcess
 import time
 
-from apscheduler.schedulers.background import BackgroundScheduler
+# from apscheduler.schedulers.background import BackgroundScheduler
+
+RUN_SPIDER_NAMES = ['Mingpao','Theguardian']
+
+def spider_start():
+    print 'spider_start called'
+    receiver = Receiver(len(MY_SPIDER_NAMES))
+    for spider_name in MY_SPIDER_NAMES:
+        cls = get_class(MY_SPIDER_MODULES.get(spider_name))
+        spider = cls()
+        set_crawler(spider, receiver)
+    reactor.run()
+
 def task():
     # 你的spider启动命令
     process = CrawlerProcess(get_project_settings())
@@ -24,10 +34,4 @@ if __name__ == "__main__":
             time.sleep(2)
     except (KeyboardInterrupt, SystemExit):
         scheduler.shutdown()
-     """
 
-
-name = 'Mingpao'
-# cmd = 'scrapy crawl {0} -o Ming.json'.format(name) 
-cmd = 'scrapy crawl {0}'.format(name) 
-cmdline.execute(cmd.split())
