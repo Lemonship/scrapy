@@ -7,17 +7,17 @@ from newsspider.items import NewsspiderItem
 import re
 import datetime
 
-class TestSpider(NewsSitemapSpider):
-    name = 'Test'
+class SCMPSpider(NewsSitemapSpider):
+    name = 'SCMP'
     sitemap_header = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36'}
     allowed_domains = ['www.scmp.com']
-    sitemap_urls = ['https://www.scmp.com/sitemap_news.xml']
-    # sitemap_urls = [
-    #     'https://www.scmp.com/sitemap_news.xml',
-    #     'https://www.scmp.com/sitemap_economy.xml',
-    #     'https://www.scmp.com/sitemap_business.xml',
-    #     'https://www.scmp.com/sitemap_property.xml'
-    #     ]
+    # sitemap_urls = ['https://www.scmp.com/sitemap_news.xml']
+    sitemap_urls = [
+        'https://www.scmp.com/sitemap_news.xml',
+        'https://www.scmp.com/sitemap_economy.xml',
+        'https://www.scmp.com/sitemap_business.xml',
+        'https://www.scmp.com/sitemap_property.xml'
+        ]
     #sitemap_follow = ['/要聞/','/港聞/','/經濟/','/中國/','/國際/','/地產/','/兩岸/']
     # custom_settings = {
     #     'FEED_EXPORT_FIELDS' : ["date", "category", "link", "keywords", "title", "desc"],
@@ -57,7 +57,7 @@ class TestSpider(NewsSitemapSpider):
         item['publication_date'] = date
         item['maincategory'] = MainCat
         item['subcategory'] = SubCat
-        item['title'] = title[0]
+        item['title'] = title
         item['desc'] = ''.join(response.xpath("//div[@class='pane-content']/p/text()").extract())
         item['link'] =  response.url
         item['keywords'] = keywords

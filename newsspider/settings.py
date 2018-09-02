@@ -13,7 +13,7 @@ BOT_NAME = 'newsspider'
 
 SPIDER_MODULES = ['newsspider.spiders']
 NEWSPIDER_MODULE = 'newsspider.spiders'
-DOWNLOAD_DELAY = 0.25
+DOWNLOAD_DELAY = 1
 
 # FEED_EXPORT_ENCODING = 'utf-8'
 # FEED_FORMAT = 'json' # 输出格式
