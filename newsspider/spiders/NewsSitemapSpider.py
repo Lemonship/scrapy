@@ -39,11 +39,6 @@ class NewsSitemapSpider(SitemapSpider):
                             if r.search(loc):
                                 yield Request(loc, callback=c)
                                 break
-
-# def regex(x):
-#     if isinstance(x, six.string_types):
-#         return re.compile(x)
-#     return x
 def iternews(it, alt=False):
     for d in it:
         news = NewsSitemapItem()

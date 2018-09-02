@@ -1,11 +1,17 @@
+""" 
 from scrapy.utils.project import get_project_settings
 from scrapy.crawler import CrawlerProcess
 import time
-
+ """
+from scrapy import cmdline
 # from apscheduler.schedulers.background import BackgroundScheduler
 
-RUN_SPIDER_NAMES = ['Mingpao','Theguardian']
-
+RUN_SPIDER_NAMES = ['Mingpao','Theguardian','Nytimes']
+# RUN_SPIDER_NAMES = ['Theguardian','Nytimes']
+for spidername in RUN_SPIDER_NAMES:
+    cmd = 'scrapy crawl {0}'.format(spidername) 
+    cmdline.execute(cmd.split())
+""" 
 def spider_start():
     print 'spider_start called'
     receiver = Receiver(len(MY_SPIDER_NAMES))
@@ -35,3 +41,4 @@ if __name__ == "__main__":
     except (KeyboardInterrupt, SystemExit):
         scheduler.shutdown()
 
+ """

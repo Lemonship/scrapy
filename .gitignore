@@ -2,3 +2,6 @@
 ScrapyData/
 newsspider/__pycache__/
 __pycache__/
+newsspider/__pycache__/items.cpython-36.pyc
+newsspider/__pycache__/settings.cpython-36.pyc
+.vscode/settings.json

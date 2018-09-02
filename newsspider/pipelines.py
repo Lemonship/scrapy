@@ -18,7 +18,7 @@ class JsonDatePipeline(object):
         self.export_item_date = {}
 
     def _exporter_for_item(self, item, spider):
-        date = item['date']
+        date = item['publication_date']
         foldername = spider.name
         filePath = 'ScrapyData/{}/{}.json'.format(foldername,date)
         if not os.path.exists(os.path.dirname(filePath)):

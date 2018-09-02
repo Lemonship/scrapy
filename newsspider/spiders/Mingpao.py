@@ -21,12 +21,15 @@ class MingpaoSpider(NewsSitemapSpider):
     def parse(self, response):     
         item = NewsspiderItem()
         title = response.xpath('//title/text()').extract()[0]
+        # title = response.xpath("//meta[@property='og:title']/@content").extract_first()
         title = re.split(' - ',title)
-        item['date'] = title[1]
+        article = ''.join(response.xpath('//p/text()').extract())
+        article = article.replace('\n','')
+        item['publication_date'] = title[1]
         item['maincategory'] = title[2]
         item['subcategory'] = title[3]
         item['title'] = title[0]
-        item['desc'] = response.xpath('//p/text()').extract()[0]
+        item['desc'] = article
         item['link'] =  response.url
         item['keywords'] = response.meta['keywords']        
         yield item 
