@@ -24,7 +24,7 @@ class SCMPSpider(NewsSitemapSpider):
         date = item['lastmod']
         # date = datetime.datetime.strptime(date,'%Y-%m-%dT%H:%MZ')
         date = parser.parse(date).date()
-        result = (changefreq == 'daily') and (date >= (datetime.datetime.now() + datetime.timedelta(days=-3)))
+        result = (changefreq == 'daily') and (date >= (datetime.datetime.now() + datetime.timedelta(days=-3)).date())
         return result
 
     def start_requests(self):

@@ -1,5 +1,5 @@
 from scrapy import cmdline
 
-name = 'Theguardian'
+name = 'SCMP'
 cmd = 'scrapy crawl {0}'.format(name) 
 cmdline.execute(cmd.split())

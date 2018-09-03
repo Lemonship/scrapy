@@ -11,16 +11,10 @@ from dateutil import parser
 class MingpaoSpider(NewsSitemapSpider):
     name = 'Mingpao'
     allowed_domains = ['news.mingpao.com']
-    # sitemap_urls = ['https://news.mingpao.com/robots.txt']
     sitemap_urls = ['https://news.mingpao.com/sitemap.xml']
-    
     sitemap_follow = ['/要聞/','/港聞/','/經濟/','/中國/','/國際/','/地產/','/兩岸/']
-    # custom_settings = {
-    #     'FEED_EXPORT_FIELDS' : ["date", "category", "link", "title", "desc"],
-    # }    
     def _index_filter(self, item):
         date = item['publication_date']
-        # date = datetime.datetime.strptime(date.replace(':',''),'%Y-%m-%dT%H%M%S%z').date()
         date = parser.parse(date).date()
         return (date >= (datetime.datetime.today() + datetime.timedelta(days=-3)).date())
 
