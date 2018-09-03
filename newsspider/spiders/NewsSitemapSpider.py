@@ -30,16 +30,20 @@ class NewsSitemapSpider(SitemapSpider):
             elif s.type == 'urlset':
                 if 'news' in s._root.nsmap and 'http://www.google.com/schemas/sitemap-news/' in s._root.nsmap['news']:
                     for news in iternews(s, self.sitemap_alternate_links):
-                        for r, c in self._cbs:
-                            if r.search(news['loc']):
-                                yield Request(news['loc'], callback=c, meta=news, headers = self.sitemap_header)
-                                break
+                        if self._index_filter(news):
+                            for r, c in self._cbs:
+                                if r.search(news['loc']):
+                                    yield Request(news['loc'], callback=c, meta=news, headers = self.sitemap_header)
+                                    break
                 else:
                     for loc in iterloc(s, self.sitemap_alternate_links):
-                        for r, c in self._cbs:
-                            if r.search(loc):
-                                yield Request(loc, callback=c, headers = self.sitemap_header)
-                                break
+                        if _index_filter(loc):
+                            for r, c in self._cbs:
+                                if r.search(loc):
+                                    yield Request(loc, callback=c, headers = self.sitemap_header)
+                                    break
+    def _index_filter(self,item):
+        return True
 def iternews(it, alt=False):
     for d in it:
         news = NewsSitemapItem()

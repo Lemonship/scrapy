@@ -20,21 +20,29 @@ class TheguardianSpider(NewsSitemapSpider):
         item = NewsspiderItem()
 
         title = response.xpath("//meta[@property='og:title']/@content").extract_first()
-        category = response.xpath("//meta[@property='article:section']/@content").extract_first()
-        
-        # title = response.xpath('//title/text()').extract()[0]
-        # title = title.split(' | ')
+        MainCat = response.xpath("//meta[@property='article:section']/@content").extract_first()
+        SubCat = MainCat
         article = ''.join(response.xpath('//p/text()').extract())
         article = article.replace('\n','')
         date = re.search(r'(\d{4})/([a-z]{3})/(\d{2})',response.url)
         date = ''.join(date.groups())
         date = datetime.datetime.strptime(date,'%Y%b%d')
         date = date.strftime('%Y%m%d')
+        keywords = response.meta['keywords']
+
         item['publication_date'] = date
-        item['maincategory'] = category
-        item['subcategory'] = category
+        item['maincategory'] = MainCat
+        item['subcategory'] = SubCat
         item['title'] = title
         item['desc'] = article
         item['link'] =  response.url
-        item['keywords'] = response.meta['keywords']
+        item['keywords'] = keywords
         yield item 
+    
+    def _index_filter(self, item):
+        date = item['publication_date']
+        date = datetime.datetime.strptime(date,'%Y-%m-%dT%H:%M:%SZ')
+        if date > (datetime.datetime.now() + datetime.timedelta(days=-3)):
+            return True
+        else:
+            return False
