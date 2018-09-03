@@ -5,7 +5,8 @@ from scrapy.spiders import Spider
 from newsspider.spiders.NewsSitemapSpider import NewsSitemapSpider
 from newsspider.items import NewsspiderItem
 import re
-
+import datetime
+from dateutil import parser
 
 class MingpaoSpider(NewsSitemapSpider):
     name = 'Mingpao'
@@ -17,6 +18,11 @@ class MingpaoSpider(NewsSitemapSpider):
     # custom_settings = {
     #     'FEED_EXPORT_FIELDS' : ["date", "category", "link", "title", "desc"],
     # }    
+    def _index_filter(self, item):
+        date = item['publication_date']
+        # date = datetime.datetime.strptime(date.replace(':',''),'%Y-%m-%dT%H%M%S%z').date()
+        date = parser.parse(date).date()
+        return (date >= (datetime.datetime.today() + datetime.timedelta(days=-3)).date())
 
     def parse(self, response):     
         item = NewsspiderItem()

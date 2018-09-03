@@ -6,15 +6,18 @@ from newsspider.spiders.NewsSitemapSpider import NewsSitemapSpider
 from newsspider.items import NewsspiderItem
 import re
 import datetime
+from dateutil import parser
 
 class NytimesSpider(NewsSitemapSpider):
     name = 'Nytimes'
     allowed_domains = ['www.nytimes.com']
     sitemap_urls = ['https://www.nytimes.com/sitemaps/sitemap_news/sitemap.xml.gz']
-    #sitemap_follow = ['/要聞/','/港聞/','/經濟/','/中國/','/國際/','/地產/','/兩岸/']
-    # custom_settings = {
-    #     'FEED_EXPORT_FIELDS' : ["date", "category", "link", "keywords", "title", "desc"],
-    # }    
+
+    def _index_filter(self, item):
+        date = item['publication_date']
+        # date = datetime.datetime.strptime(date.replace(':',''),'%Y-%m-%dT%H%M%S%z').date()
+        date = parser.parse(date).date()
+        return (date >= (datetime.datetime.today() + datetime.timedelta(days=-3)).date())
 
     def parse(self, response):     
         item = NewsspiderItem()

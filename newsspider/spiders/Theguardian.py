@@ -6,15 +6,17 @@ from newsspider.spiders.NewsSitemapSpider import NewsSitemapSpider
 from newsspider.items import NewsspiderItem
 import re
 import datetime
+from dateutil import parser
 
 class TheguardianSpider(NewsSitemapSpider):
     name = 'Theguardian'
     allowed_domains = ['www.theguardian.com']
     sitemap_urls = ['https://www.theguardian.com/sitemaps/news.xml']
-    #sitemap_follow = ['/要聞/','/港聞/','/經濟/','/中國/','/國際/','/地產/','/兩岸/']
-    # custom_settings = {
-    #     'FEED_EXPORT_FIELDS' : ["date", "category", "link", "keywords", "title", "desc"],
-    # }
+
+    def _index_filter(self, item):
+        date = item['publication_date']
+        date = parser.parse(date).date()
+        return (date >= (datetime.datetime.today() + datetime.timedelta(days=-3)).date())
 
     def parse(self, response):     
         item = NewsspiderItem()
@@ -38,11 +40,4 @@ class TheguardianSpider(NewsSitemapSpider):
         item['link'] =  response.url
         item['keywords'] = keywords
         yield item 
-    
-    def _index_filter(self, item):
-        date = item['publication_date']
-        date = datetime.datetime.strptime(date,'%Y-%m-%dT%H:%M:%SZ')
-        if date > (datetime.datetime.now() + datetime.timedelta(days=-3)):
-            return True
-        else:
-            return False
+

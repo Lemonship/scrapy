@@ -6,22 +6,27 @@ from newsspider.spiders.NewsSitemapSpider import NewsSitemapSpider
 from newsspider.items import NewsspiderItem
 import re
 import datetime
+from dateutil import parser
 
 class SCMPSpider(NewsSitemapSpider):
     name = 'SCMP'
     sitemap_header = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36'}
     allowed_domains = ['www.scmp.com']
-    # sitemap_urls = ['https://www.scmp.com/sitemap_news.xml']
     sitemap_urls = [
         'https://www.scmp.com/sitemap_news.xml',
         'https://www.scmp.com/sitemap_economy.xml',
         'https://www.scmp.com/sitemap_business.xml',
         'https://www.scmp.com/sitemap_property.xml'
         ]
-    #sitemap_follow = ['/要聞/','/港聞/','/經濟/','/中國/','/國際/','/地產/','/兩岸/']
-    # custom_settings = {
-    #     'FEED_EXPORT_FIELDS' : ["date", "category", "link", "keywords", "title", "desc"],
-    # }    
+
+    def _index_filter(self, item):
+        changefreq = item['changefreq']
+        date = item['lastmod']
+        # date = datetime.datetime.strptime(date,'%Y-%m-%dT%H:%MZ')
+        date = parser.parse(date).date()
+        result = (changefreq == 'daily') and (date >= (datetime.datetime.now() + datetime.timedelta(days=-3)))
+        return result
+
     def start_requests(self):
         for url in self.sitemap_urls:
             yield Request(url, headers=self.sitemap_header, callback=self._parse_sitemap)
@@ -29,13 +34,6 @@ class SCMPSpider(NewsSitemapSpider):
 
     def parse(self, response):     
         item = NewsspiderItem()
-
-
-        title = response.xpath("//meta[@property='og:title']/@content").extract_first()
-
-        # title = response.xpath('//title/text()').extract()[0]
-        # title = title.split(' | ')
-         
         URLInfo = re.search(r'/(?P<MainCat>[\w-]+)/(?P<SubCat>[\w-]+)/article/',response.url)
         if URLInfo is None:
             URLInfo = re.search(r'/(?P<MainCat>[\w-]+)/article/',response.url)

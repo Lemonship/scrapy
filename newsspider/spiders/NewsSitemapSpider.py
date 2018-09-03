@@ -36,11 +36,11 @@ class NewsSitemapSpider(SitemapSpider):
                                     yield Request(news['loc'], callback=c, meta=news, headers = self.sitemap_header)
                                     break
                 else:
-                    for loc in iterloc(s, self.sitemap_alternate_links):
-                        if _index_filter(loc):
+                    for item in iteritem(s):
+                        if self._index_filter(item):
                             for r, c in self._cbs:
-                                if r.search(loc):
-                                    yield Request(loc, callback=c, headers = self.sitemap_header)
+                                if r.search(item['loc']):
+                                    yield Request(item['loc'], callback=c, meta=item, headers = self.sitemap_header)
                                     break
     def _index_filter(self,item):
         return True
@@ -59,6 +59,10 @@ def iternews(it, alt=False):
         # if alt and 'alternate' in d:
         #     for l in d['alternate']:
         #         yield l
+
+def iteritem(it):
+    for d in it:
+        yield d
 
 def iterloc(it, alt=False):
     for d in it:
