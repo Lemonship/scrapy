@@ -13,10 +13,23 @@ class MingpaoSpider(NewsSitemapSpider):
     allowed_domains = ['news.mingpao.com']
     sitemap_urls = ['https://news.mingpao.com/sitemap.xml']
     sitemap_follow = ['/要聞/','/港聞/','/經濟/','/中國/','/國際/','/地產/','/兩岸/']
+
+    def __init__(self, datestart = None, dateend= None, *a, **kw):
+        super(MingpaoSpider, self).__init__(*a, **kw)
+        if datestart is not None:
+            self.datestart = datetime.datetime.strptime(datestart,'%Y%m%d').date()
+        else:
+            self.datestart = (datetime.datetime.now() + datetime.timedelta(days=-3)).date()
+        if dateend is not None:
+            self.dateend = datetime.datetime.strptime(dateend,'%Y%m%d').date()
+        else:
+            self.dateend = (self.datestart + datetime.timedelta(days=3)).date
+
     def _index_filter(self, item):
         date = item['publication_date']
         date = parser.parse(date).date()
-        return (date >= (datetime.datetime.today() + datetime.timedelta(days=-3)).date())
+        result =  (self.datestart <= date <= self.dateend)
+        return result
 
     def parse(self, response):     
         item = NewsspiderItem()

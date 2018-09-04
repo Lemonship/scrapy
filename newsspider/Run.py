@@ -1,33 +1,31 @@
-""" 
+
 from scrapy.utils.project import get_project_settings
 from scrapy.crawler import CrawlerProcess
 import time
- """
-from scrapy import cmdline
+
+# from scrapy import cmdline
 # from apscheduler.schedulers.background import BackgroundScheduler
 
 RUN_SPIDER_NAMES = ['Mingpao','Theguardian','Nytimes','SCMP']
-# RUN_SPIDER_NAMES = ['Theguardian','Nytimes']
-for spidername in RUN_SPIDER_NAMES:
-    cmd = 'scrapy crawl {0}'.format(spidername) 
-    cmdline.execute(cmd.split())
-""" 
+
+# RUN_SPIDER_NAMES = ['Mingpao']
+DATESTART = '20180801'
+DATEEND = '20180831'
+# for spidername in RUN_SPIDER_NAMES:
+#     cmd = 'scrapy crawl {0}'.format(spidername) 
+#     cmdline.execute(cmd.split())
+
 def spider_start():
-    print 'spider_start called'
-    receiver = Receiver(len(MY_SPIDER_NAMES))
-    for spider_name in MY_SPIDER_NAMES:
-        cls = get_class(MY_SPIDER_MODULES.get(spider_name))
-        spider = cls()
-        set_crawler(spider, receiver)
-    reactor.run()
-
-def task():
-    # 你的spider启动命令
+    print('spider_start called')
     process = CrawlerProcess(get_project_settings())
+    for spider_name in RUN_SPIDER_NAMES:
+        spider_name = spider_name
+        process.crawl(spider_name, datestart = DATESTART, dateend = DATEEND)
+        print('{} called'.format(spider_name))
+    process.start() 
 
-    process.crawl(PostSpider)
-    process.start() # the script will block here until the crawling is finished
-    # pass
+spider_start()
+""" 
 
 if __name__ == "__main__":
     scheduler = BackgroundScheduler()

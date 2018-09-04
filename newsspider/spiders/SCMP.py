@@ -19,12 +19,23 @@ class SCMPSpider(NewsSitemapSpider):
         'https://www.scmp.com/sitemap_property.xml'
         ]
 
+    def __init__(self, datestart = None, dateend= None, *a, **kw):
+        super(SCMPSpider, self).__init__(*a, **kw)
+        if datestart is not None:
+            self.datestart = datetime.datetime.strptime(datestart,'%Y%m%d').date()
+        else:
+            self.datestart = (datetime.datetime.now() + datetime.timedelta(days=-3)).date()
+        if dateend is not None:
+            self.dateend = datetime.datetime.strptime(dateend,'%Y%m%d').date()
+        else:
+            self.dateend = (self.datestart + datetime.timedelta(days=3)).date
+
     def _index_filter(self, item):
         changefreq = item['changefreq']
         date = item['lastmod']
         # date = datetime.datetime.strptime(date,'%Y-%m-%dT%H:%MZ')
         date = parser.parse(date).date()
-        result = (changefreq == 'daily') and (date >= (datetime.datetime.now() + datetime.timedelta(days=-3)).date())
+        result = (changefreq == 'daily') and (self.datestart <= date <= self.dateend)
         return result
 
     def start_requests(self):

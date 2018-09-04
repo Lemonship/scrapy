@@ -13,10 +13,22 @@ class TheguardianSpider(NewsSitemapSpider):
     allowed_domains = ['www.theguardian.com']
     sitemap_urls = ['https://www.theguardian.com/sitemaps/news.xml']
 
+    def __init__(self, datestart = None, dateend= None, *a, **kw):
+        super(TheguardianSpider, self).__init__(*a, **kw)
+        if datestart is not None:
+            self.datestart = datetime.datetime.strptime(datestart,'%Y%m%d').date()
+        else:
+            self.datestart = (datetime.datetime.now() + datetime.timedelta(days=-3)).date()
+        if dateend is not None:
+            self.dateend = datetime.datetime.strptime(dateend,'%Y%m%d').date()
+        else:
+            self.dateend = (self.datestart + datetime.timedelta(days=3)).date
+
     def _index_filter(self, item):
         date = item['publication_date']
         date = parser.parse(date).date()
-        return (date >= (datetime.datetime.today() + datetime.timedelta(days=-3)).date())
+        result =  (self.datestart <= date <= self.dateend)
+        return result
 
     def parse(self, response):     
         item = NewsspiderItem()
